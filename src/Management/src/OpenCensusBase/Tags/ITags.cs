@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OpenCensus.Tags;
-using OpenCensus.Tags.Propagation;
+using OpenTelemetry.Tags;
 
 namespace Steeltoe.Management.Census.Tags
 {
@@ -21,8 +20,6 @@ namespace Steeltoe.Management.Census.Tags
     {
         ITagger Tagger { get; }
 
-        ITagPropagationComponent TagPropagationComponent { get; }
-
-        TaggingState State { get; }
+       // TaggingState State { get; }
     }
 }

@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OpenCensus.Tags;
-using OpenCensus.Tags.Propagation;
+using OpenTelemetry.Tags;
+using OpenTelemetry.Tags.Propagation;
 using System;
 
 namespace Steeltoe.Management.Census.Tags
@@ -24,29 +24,31 @@ namespace Steeltoe.Management.Census.Tags
 
         public static OpenCensusTags Instance => AsSingleton.Value;
 
-        private readonly ITagsComponent tagsComponent = new TagsComponent();
+        // private readonly ITagsComponent tagsComponent = new TagsComponent();
+        private readonly CurrentTaggingState taggingState = new CurrentTaggingState();
+       // private readonly Tagger tagger = new Tagger(taggingState);
 
         public ITagger Tagger
         {
             get
             {
-                return tagsComponent.Tagger;
+                return null;
             }
         }
 
-        public ITagPropagationComponent TagPropagationComponent
-        {
-            get
-            {
-                return tagsComponent.TagPropagationComponent;
-            }
-        }
+        //public ITagPropagationComponent TagPropagationComponent
+        //{
+        //    get
+        //    {
+        //        return tagsComponent.TagPropagationComponent;
+        //    }
+        //}
 
-        public TaggingState State
+        public CurrentTaggingState State
         {
             get
             {
-                return tagsComponent.State;
+                return taggingState;
             }
         }
     }

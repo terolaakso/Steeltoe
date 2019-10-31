@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OpenCensus.Trace;
-using OpenCensus.Trace.Config;
-using OpenCensus.Trace.Export;
-using OpenCensus.Trace.Propagation;
+using OpenTelemetry.Trace;
 
 namespace Steeltoe.Management.Census.Trace
 {
@@ -23,10 +20,10 @@ namespace Steeltoe.Management.Census.Trace
     {
         ITracer Tracer { get; }
 
-        IPropagationComponent PropagationComponent { get; }
+      //  IPropagationComponent PropagationComponent { get; }
 
-        IExportComponent ExportComponent { get; }
+      //  IExportComponent ExportComponent { get; }
 
-        ITraceConfig TraceConfig { get; }
+      //  ITraceConfig TraceConfig { get; }
     }
 }

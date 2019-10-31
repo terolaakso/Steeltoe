@@ -13,10 +13,10 @@
 // limitations under the License.
 
 using Microsoft.Extensions.Logging;
-using OpenCensus.Stats;
-using OpenCensus.Stats.Aggregations;
-using OpenCensus.Stats.Measures;
-using OpenCensus.Tags;
+using OpenTelemetry.Stats;
+using OpenTelemetry.Stats.Aggregations;
+using OpenTelemetry.Stats.Measures;
+using OpenTelemetry.Tags;
 using Steeltoe.Management.Census.Stats;
 using Steeltoe.Management.Census.Tags;
 using System.Collections.Generic;
@@ -34,20 +34,20 @@ namespace Steeltoe.Management.Endpoint.Metrics.Observer
 
         private const string GENERATION_TAGVALUE_NAME = "gen";
 
-        private readonly ITagKey threadKindKey = TagKey.Create("kind");
-        private readonly ITagValue threadPoolWorkerKind = TagValue.Create("worker");
-        private readonly ITagValue threadPoolComppKind = TagValue.Create("completionPort");
+        private readonly TagKey threadKindKey = TagKey.Create("kind");
+        private readonly TagValue threadPoolWorkerKind = TagValue.Create("worker");
+        private readonly TagValue threadPoolComppKind = TagValue.Create("completionPort");
 
         private readonly IMeasureLong activeThreadsMeasure;
         private readonly IMeasureLong availThreadsMeasure;
         private readonly ITagContext threadPoolWorkerTagValues;
         private readonly ITagContext threadPoolCompPortTagValues;
 
-        private readonly ITagKey generationKey = TagKey.Create("generation");
+        private readonly TagKey generationKey = TagKey.Create("generation");
         private readonly IMeasureLong collectionCountMeasure;
 
-        private readonly ITagKey memoryAreaKey = TagKey.Create("area");
-        private readonly ITagValue heapArea = TagValue.Create("heap");
+        private readonly TagKey memoryAreaKey = TagKey.Create("area");
+        private readonly TagValue heapArea = TagValue.Create("heap");
         private readonly IMeasureLong memoryUsedMeasure;
         private readonly ITagContext memoryTagValues;
 
@@ -140,12 +140,12 @@ namespace Steeltoe.Management.Endpoint.Metrics.Observer
 
         protected internal void RegisterViews()
         {
-            IView view = View.Create(
+            var view = View.Create(
                     ViewName.Create("clr.memory.used"),
                     "Current CLR memory usage",
                     memoryUsedMeasure,
                     Mean.Create(),
-                    new List<ITagKey>() { memoryAreaKey });
+                    new List<TagKey>() { memoryAreaKey });
             ViewManager.RegisterView(view);
 
             view = View.Create(
@@ -153,7 +153,7 @@ namespace Steeltoe.Management.Endpoint.Metrics.Observer
                     "Garbage collection count",
                     collectionCountMeasure,
                     Sum.Create(),
-                    new List<ITagKey>() { generationKey });
+                    new List<TagKey>() { generationKey });
             ViewManager.RegisterView(view);
 
             view = View.Create(
@@ -161,7 +161,7 @@ namespace Steeltoe.Management.Endpoint.Metrics.Observer
                     "Active thread count",
                     activeThreadsMeasure,
                     Mean.Create(),
-                    new List<ITagKey>() { threadKindKey });
+                    new List<TagKey>() { threadKindKey });
             ViewManager.RegisterView(view);
 
             view = View.Create(
@@ -169,7 +169,7 @@ namespace Steeltoe.Management.Endpoint.Metrics.Observer
                     "Available thread count",
                     availThreadsMeasure,
                     Mean.Create(),
-                    new List<ITagKey>() { threadKindKey });
+                    new List<TagKey>() { threadKindKey });
             ViewManager.RegisterView(view);
         }
     }

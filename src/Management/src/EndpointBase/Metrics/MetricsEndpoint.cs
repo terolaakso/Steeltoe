@@ -13,11 +13,12 @@
 // limitations under the License.
 
 using Microsoft.Extensions.Logging;
-using OpenCensus.Stats;
-using OpenCensus.Tags;
+using OpenTelemetry.Stats;
+using OpenTelemetry.Tags;
 using Steeltoe.Management.Census.Stats;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Steeltoe.Management.Endpoint.Metrics
 {
@@ -79,7 +80,7 @@ namespace Steeltoe.Management.Endpoint.Metrics
             return GetAvailableTags(viewData.View.Columns, viewData.AggregationMap);
         }
 
-        protected internal List<MetricTag> GetAvailableTags(IList<ITagKey> columns, IDictionary<TagValues, IAggregationData> aggMap)
+        protected internal List<MetricTag> GetAvailableTags(IReadOnlyList<TagKey> columns, IDictionary<TagValues, IAggregationData> aggMap)
         {
             List<MetricTag> results = new List<MetricTag>();
 
@@ -239,14 +240,14 @@ namespace Steeltoe.Management.Endpoint.Metrics
             return result;
         }
 
-        protected internal List<ITagValue> GetTagValuesInColumnOrder(IList<ITagKey> columns, List<KeyValuePair<string, string>> tags)
+        protected internal List<TagValue> GetTagValuesInColumnOrder(IReadOnlyList<TagKey> columns, List<KeyValuePair<string, string>> tags)
         {
-            ITagValue[] tagValues = new ITagValue[columns.Count];
+            TagValue[] tagValues = new TagValue[columns.Count];
             foreach (var kvp in tags)
             {
                 var key = TagKey.Create(kvp.Key);
                 var value = TagValue.Create(kvp.Value);
-                int indx = columns.IndexOf(key);
+                int indx = columns.ToList().IndexOf(key);
                 if (indx < 0)
                 {
                     return null;
@@ -255,7 +256,7 @@ namespace Steeltoe.Management.Endpoint.Metrics
                 tagValues[indx] = value;
             }
 
-            return new List<ITagValue>(tagValues);
+            return new List<TagValue>(tagValues);
         }
 
         protected internal ISet<string> GetMetricNames()

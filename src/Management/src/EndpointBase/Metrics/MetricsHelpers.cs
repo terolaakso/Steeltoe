@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OpenCensus.Stats;
-using OpenCensus.Tags;
+using OpenTelemetry.Stats;
+using OpenTelemetry.Tags;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,13 +21,13 @@ namespace Steeltoe.Management.Endpoint.Metrics
 {
     internal static class MetricsHelpers
     {
-        internal static IAggregationData SumWithTags(IViewData viewData, IList<ITagValue> tagValues = null)
+        internal static IAggregationData SumWithTags(IViewData viewData, IList<TagValue> tagValues = null)
         {
             var withTags = viewData.AggregationMap.WithTags(tagValues);
             return StatsExtensions.Sum(withTags, viewData.View);
         }
 
-        private static IDictionary<TagValues, IAggregationData> WithTags(this IDictionary<TagValues, IAggregationData> aggMap, IList<ITagValue> values)
+        private static IDictionary<TagValues, IAggregationData> WithTags(this IDictionary<TagValues, IAggregationData> aggMap, IList<TagValue> values)
         {
             Dictionary<TagValues, IAggregationData> results = new Dictionary<TagValues, IAggregationData>();
 
@@ -42,7 +42,7 @@ namespace Steeltoe.Management.Endpoint.Metrics
             return results;
         }
 
-        private static bool TagValuesMatch(IEnumerable<ITagValue> aggValues, IEnumerable<ITagValue> values)
+        private static bool TagValuesMatch(IEnumerable<TagValue> aggValues, IEnumerable<TagValue> values)
         {
             if (values == null)
             {

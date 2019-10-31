@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OpenCensus.Stats;
+using OpenTelemetry.Stats;
 using System;
 
 namespace Steeltoe.Management.Census.Stats
@@ -23,7 +23,7 @@ namespace Steeltoe.Management.Census.Stats
 
         public static OpenCensusStats Instance => AsSingleton.Value;
 
-        private readonly IStatsComponent statsComponent = new StatsComponent();
+      //  private readonly IStatsComponent statsComponent = new StatsComponent();
 
         public OpenCensusStats()
         {
@@ -33,7 +33,7 @@ namespace Steeltoe.Management.Census.Stats
         {
             get
             {
-                return statsComponent.StatsRecorder;
+                return null;// statsComponent.StatsRecorder;
             }
         }
 
@@ -41,7 +41,7 @@ namespace Steeltoe.Management.Census.Stats
         {
             get
             {
-                return statsComponent.ViewManager;
+                return null;// statsComponent.ViewManager;
             }
         }
 
@@ -49,12 +49,12 @@ namespace Steeltoe.Management.Census.Stats
         {
             get
             {
-                return statsComponent.State;
+                return StatsCollectionState.DISABLED; //statsComponent.State;
             }
 
             set
             {
-                ((StatsComponent)statsComponent).State = value;
+               // ((StatsComponent)statsComponent).State = value;
             }
         }
     }

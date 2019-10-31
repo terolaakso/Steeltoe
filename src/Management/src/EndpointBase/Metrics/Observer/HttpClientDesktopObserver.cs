@@ -13,10 +13,10 @@
 // limitations under the License.
 
 using Microsoft.Extensions.Logging;
-using OpenCensus.Stats;
-using OpenCensus.Stats.Aggregations;
-using OpenCensus.Stats.Measures;
-using OpenCensus.Tags;
+using OpenTelemetry.Stats;
+using OpenTelemetry.Stats.Aggregations;
+using OpenTelemetry.Stats.Measures;
+using OpenTelemetry.Tags;
 using Steeltoe.Common;
 using Steeltoe.Common.Diagnostics;
 using Steeltoe.Management.Census.Stats;
@@ -37,10 +37,10 @@ namespace Steeltoe.Management.Endpoint.Metrics.Observer
         internal const string STOP_EVENT = "System.Net.Http.Desktop.HttpRequestOut.Stop";
         internal const string STOPEX_EVENT = "System.Net.Http.Desktop.HttpRequestOut.Ex.Stop";
 
-        private readonly ITagKey statusTagKey = TagKey.Create("status");
-        private readonly ITagKey uriTagKey = TagKey.Create("uri");
-        private readonly ITagKey methodTagKey = TagKey.Create("method");
-        private readonly ITagKey clientTagKey = TagKey.Create("clientName");
+        private readonly TagKey statusTagKey = TagKey.Create("status");
+        private readonly TagKey uriTagKey = TagKey.Create("uri");
+        private readonly TagKey methodTagKey = TagKey.Create("method");
+        private readonly TagKey clientTagKey = TagKey.Create("clientName");
 
         private readonly IMeasureDouble clientTimeMeasure;
         private readonly IMeasureLong clientCountMeasure;
@@ -58,7 +58,7 @@ namespace Steeltoe.Management.Endpoint.Metrics.Observer
                     "Total request time",
                     clientTimeMeasure,
                     Distribution.Create(BucketBoundaries.Create(new List<double>() { 0.0, 1.0, 5.0, 10.0, 100.0 })),
-                    new List<ITagKey>() { statusTagKey, uriTagKey, methodTagKey, clientTagKey });
+                    new List<TagKey>() { statusTagKey, uriTagKey, methodTagKey, clientTagKey });
 
             ViewManager.RegisterView(view);
 
@@ -67,7 +67,7 @@ namespace Steeltoe.Management.Endpoint.Metrics.Observer
                     "Total request counts",
                     clientCountMeasure,
                     Sum.Create(),
-                    new List<ITagKey>() { statusTagKey, uriTagKey, methodTagKey, clientTagKey });
+                    new List<TagKey>() { statusTagKey, uriTagKey, methodTagKey, clientTagKey });
             ViewManager.RegisterView(view);
         }
 

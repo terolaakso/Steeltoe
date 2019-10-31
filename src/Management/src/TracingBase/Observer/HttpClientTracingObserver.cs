@@ -13,9 +13,9 @@
 // limitations under the License.
 
 using Microsoft.Extensions.Logging;
-using OpenCensus.Common;
-using OpenCensus.Trace;
-using OpenCensus.Trace.Propagation;
+using OpenTelemetry.Context;
+using OpenTelemetry.Context.Propagation;
+using OpenTelemetry.Trace;
 using Steeltoe.Common.Diagnostics;
 using Steeltoe.Management.Census.Trace;
 using System;
@@ -40,7 +40,7 @@ namespace Steeltoe.Management.Tracing.Observer
         {
             Options = options;
             Tracing = tracing;
-            Propagation = tracing.PropagationComponent.TextFormat;
+            Propagation = tracing.Tracer.TextFormat;
             Tracer = tracing.Tracer;
             PathMatcher = new Regex(options.EgressIgnorePattern);
         }
@@ -73,12 +73,12 @@ namespace Steeltoe.Management.Tracing.Observer
         protected internal ISpan GetCurrentSpan()
         {
             var span = Tracer.CurrentSpan;
-            if (span.Context == OpenCensus.Trace.SpanContext.Invalid)
+            if (span.Context.IsValid)
             {
-                return null;
+                return span;
             }
 
-            return span;
+            return null;
         }
 
         public class SpanContext

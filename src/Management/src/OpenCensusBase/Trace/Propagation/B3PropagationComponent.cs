@@ -12,31 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OpenCensus.Trace.Propagation;
-
 namespace Steeltoe.Management.Census.Trace.Propagation
 {
-    public sealed class B3PropagationComponent : PropagationComponentBase
-    {
-        private readonly ThrowsBinaryFormat binaryFormat = new ThrowsBinaryFormat();
-        private readonly B3Format textFormat = new B3Format();
+    //public sealed class B3PropagationComponent : PropagationComponentBase
+    //{
+    //    private readonly ThrowsBinaryFormat binaryFormat = new ThrowsBinaryFormat();
+    //    private readonly B3Format textFormat = new B3Format();
 
-        /// <inheritdoc/>
-        public override IBinaryFormat BinaryFormat
-        {
-            get
-            {
-                return this.binaryFormat;
-            }
-        }
+    //    /// <inheritdoc/>
+    //    public override IBinaryFormat BinaryFormat
+    //    {
+    //        get
+    //        {
+    //            return this.binaryFormat;
+    //        }
+    //    }
 
-        /// <inheritdoc/>
-        public override ITextFormat TextFormat
-        {
-            get
-            {
-                return this.textFormat;
-            }
-        }
-    }
+    //    /// <inheritdoc/>
+    //    public override ITextFormat TextFormat
+    //    {
+    //        get
+    //        {
+    //            return this.textFormat;
+    //        }
+    //    }
+    //}
 }

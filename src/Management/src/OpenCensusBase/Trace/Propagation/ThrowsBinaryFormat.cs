@@ -12,21 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OpenCensus.Trace;
-using OpenCensus.Trace.Propagation;
+using OpenTelemetry.Trace;
 
 namespace Steeltoe.Management.Census.Trace.Propagation
 {
-    public class ThrowsBinaryFormat : BinaryFormatBase
+    public class ThrowsBinaryFormat //: BinaryFormatBase
     {
-        public override ISpanContext FromByteArray(byte[] bytes)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public override SpanContext FromByteArray(byte[] bytes)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
 
-        public override byte[] ToByteArray(ISpanContext spanContext)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public override byte[] ToByteArray(SpanContext spanContext)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
     }
 }

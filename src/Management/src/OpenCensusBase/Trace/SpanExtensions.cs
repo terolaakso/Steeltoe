@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OpenCensus.Trace;
+using OpenTelemetry.Trace;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
@@ -76,31 +76,31 @@ namespace Steeltoe.Management.Census.Trace
 
         public static ISpan PutErrorAttribute(this ISpan span, string errorMessage)
         {
-            span.PutAttribute(SpanAttributeConstants.ErrorKey, AttributeValue.StringAttributeValue(errorMessage));
+            span.SetAttribute(SpanAttributeConstants.ErrorKey, errorMessage);
             return span;
         }
 
         public static ISpan PutErrorStackTraceAttribute(this ISpan span, string errorStackTrace)
         {
-            span.PutAttribute(SpanAttributeConstants.ErrorStackTrace, AttributeValue.StringAttributeValue(errorStackTrace));
+            span.SetAttribute(SpanAttributeConstants.ErrorStackTrace, errorStackTrace);
             return span;
         }
 
         public static ISpan PutMvcControllerClass(this ISpan span, string className)
         {
-            span.PutAttribute(SpanAttributeConstants.MvcControllerClass, AttributeValue.StringAttributeValue(className));
+            span.SetAttribute(SpanAttributeConstants.MvcControllerClass, className);
             return span;
         }
 
         public static ISpan PutMvcControllerAction(this ISpan span, string actionName)
         {
-            span.PutAttribute(SpanAttributeConstants.MvcControllerMethod, AttributeValue.StringAttributeValue(actionName));
+            span.SetAttribute(SpanAttributeConstants.MvcControllerMethod, actionName);
             return span;
         }
 
         public static ISpan PutMvcViewExecutingFilePath(this ISpan span, string actionName)
         {
-            span.PutAttribute(SpanAttributeConstants.MvcViewFilePath, AttributeValue.StringAttributeValue(actionName));
+            span.SetAttribute(SpanAttributeConstants.MvcViewFilePath, actionName);
             return span;
         }
 
@@ -132,7 +132,7 @@ namespace Steeltoe.Management.Census.Trace
         {
             foreach (var header in headers)
             {
-                span.PutAttribute(key + header.Key, ToCommaDelimitedStringAttribute(header.Value));
+                span.SetAttribute(key + header.Key, string.Join(",", header.Value));
             }
         }
 
@@ -140,15 +140,10 @@ namespace Steeltoe.Management.Census.Trace
         {
             foreach (var header in headers.AllKeys)
             {
-                IAttributeValue values = ToCommaDelimitedStringAttribute(headers.GetValues(header));
-                span.PutAttribute(key + header, values);
+                var values = string.Join(",", headers.GetValues(header));
+                span.SetAttribute(key + header, values);
             }
         }
 
-        private static IAttributeValue ToCommaDelimitedStringAttribute(IEnumerable<string> values)
-        {
-            var list = string.Join(",", values);
-            return AttributeValue.StringAttributeValue(list);
-        }
     }
 }
