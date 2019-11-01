@@ -14,13 +14,13 @@
 // limitations under the License.
 // </copyright>
 
+using System.Collections.Generic;
+using OpenCensus.Common;
+using OpenCensus.Tags.Unsafe;
+using Xunit;
+
 namespace OpenCensus.Tags.Test
 {
-    using System.Collections.Generic;
-    using OpenCensus.Common;
-    using OpenCensus.Tags.Unsafe;
-    using Xunit;
-
     public class CurrentTagContextUtilsTest
     {
         private static readonly ITag TAG = Tag.Create(TagKey.Create("key"), TagValue.Create("value"));

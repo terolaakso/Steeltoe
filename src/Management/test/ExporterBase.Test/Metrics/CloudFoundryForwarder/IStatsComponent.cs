@@ -13,13 +13,13 @@
 // limitations under the License.
 
 using OpenTelemetry.Stats;
-using OpenTelemetry.Tags;
-using System.Collections.Generic;
 
-namespace Steeltoe.Management.Exporter.Metrics.CloudFoundryForwarder
+namespace Steeltoe.Management.Exporter.Metrics.CloudFoundryForwarder.Test
 {
-    public interface ICloudFoundryMetricWriter
+    internal interface IStatsComponent
     {
-        IList<Metric> CreateMetrics(IViewData viewData, IAggregationData aggregation, TagValues tagValues, long timeStamp);
+        IStatsRecorder StatsRecorder { get; set; }
+        IViewManager ViewManager { get; }
+        StatsCollectionState State { get; }
     }
 }

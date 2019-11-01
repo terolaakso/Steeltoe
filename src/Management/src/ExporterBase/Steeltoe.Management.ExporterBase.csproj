@@ -22,4 +22,10 @@
     <PackageReference Include="Steeltoe.Extensions.Configuration.CloudFoundryBase" Version="$(SteeltoeVersion)$(SteeltoeVersionSuffix)" />
     <PackageReference Include="Steeltoe.Management.OpenCensusBase" Version="$(SteeltoeVersion)$(SteeltoeVersionSuffix)" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Tracing\**" />
+    <EmbeddedResource Remove="Tracing\**" />
+    <None Remove="Tracing\**" />
+  </ItemGroup>
 </Project>

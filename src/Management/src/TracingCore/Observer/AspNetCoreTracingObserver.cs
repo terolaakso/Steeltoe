@@ -14,9 +14,9 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using OpenCensus.Common;
-using OpenCensus.Trace;
-using OpenCensus.Trace.Propagation;
+using OpenTelemetry.Context;
+using OpenTelemetry.Context.Propagation;
+using OpenTelemetry.Trace;
 using Steeltoe.Common.Diagnostics;
 using Steeltoe.Management.Census.Trace;
 using System;
@@ -43,7 +43,7 @@ namespace Steeltoe.Management.Tracing.Observer
         {
             Options = options;
             Tracing = tracing;
-            Propagation = tracing.PropagationComponent.TextFormat;
+            //Propagation = tracing.PropagationComponent.TextFormat;
             Tracer = tracing.Tracer;
             PathMatcher = new Regex(options.IngressIgnorePattern);
         }
@@ -77,7 +77,7 @@ namespace Steeltoe.Management.Tracing.Observer
         protected internal ISpan GetCurrentSpan()
         {
             var span = Tracer.CurrentSpan;
-            if (span.Context == OpenCensus.Trace.SpanContext.Invalid)
+            if (!span.Context.IsValid)
             {
                 return null;
             }

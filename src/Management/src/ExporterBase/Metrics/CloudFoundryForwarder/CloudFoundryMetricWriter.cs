@@ -13,8 +13,8 @@
 // limitations under the License.
 
 using Microsoft.Extensions.Logging;
-using OpenCensus.Stats;
-using OpenCensus.Tags;
+using OpenTelemetry.Stats;
+using OpenTelemetry.Tags;
 using Steeltoe.Management.Census.Stats;
 using System.Collections.Generic;
 
@@ -35,7 +35,7 @@ namespace Steeltoe.Management.Exporter.Metrics.CloudFoundryForwarder
 
         public abstract IList<Metric> CreateMetrics(IViewData viewData, IAggregationData aggregation, TagValues tagValues, long timeStamp);
 
-        protected internal IDictionary<string, string> GetTagKeysAndValues(IList<ITagKey> keys, IList<ITagValue> values)
+        protected internal IDictionary<string, string> GetTagKeysAndValues(IReadOnlyList<TagKey> keys, IReadOnlyList<TagValue> values)
         {
             IDictionary<string, string> result = new SortedDictionary<string, string>();
 

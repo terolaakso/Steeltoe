@@ -13,9 +13,9 @@
 // limitations under the License.
 
 using Newtonsoft.Json;
-using OpenCensus.Stats;
-using OpenCensus.Stats.Measures;
-using OpenCensus.Tags;
+using OpenTelemetry.Stats;
+using OpenTelemetry.Stats.Measures;
+using OpenTelemetry.Tags;
 using Steeltoe.Management.Census.Stats;
 using System;
 using System.Collections.Generic;
@@ -33,9 +33,9 @@ namespace Steeltoe.Management.Exporter.Metrics.CloudFoundryForwarder.Test
 
         public void SetupTestView(OpenCensusStats stats, IAggregation agg, IMeasure measure = null, string viewName = "test.test")
         {
-            ITagKey aKey = TagKey.Create("a");
-            ITagKey bKey = TagKey.Create("b");
-            ITagKey cKey = TagKey.Create("c");
+            TagKey aKey = TagKey.Create("a");
+            TagKey bKey = TagKey.Create("b");
+            TagKey cKey = TagKey.Create("c");
 
             if (measure == null)
             {
@@ -48,7 +48,7 @@ namespace Steeltoe.Management.Exporter.Metrics.CloudFoundryForwarder.Test
                                         "test",
                                         measure,
                                         agg,
-                                        new List<ITagKey>() { aKey, bKey, cKey });
+                                        new List<TagKey>() { aKey, bKey, cKey });
 
             stats.ViewManager.RegisterView(testView);
         }

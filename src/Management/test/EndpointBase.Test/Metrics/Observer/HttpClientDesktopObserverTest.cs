@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OpenCensus.Stats;
-using OpenCensus.Stats.Aggregations;
-using OpenCensus.Tags;
+using OpenTelemetry.Stats;
+using OpenTelemetry.Stats.Aggregations;
+using OpenTelemetry.Tags;
 using Steeltoe.Management.Census.Stats;
 using Steeltoe.Management.Census.Tags;
 using Steeltoe.Management.Endpoint.Test;

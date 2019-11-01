@@ -16,8 +16,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Logging;
-using OpenCensus.Common;
-using OpenCensus.Trace;
+using OpenTelemetry.Context;
+using OpenTelemetry.Trace;
 using Steeltoe.Common.Diagnostics;
 using Steeltoe.Management.Census.Trace;
 using System.Threading;
@@ -99,10 +99,10 @@ namespace Steeltoe.Management.Tracing.Observer
             }
 
             string spanName = ExtractSpanName(descriptor);
-            IScope scope = Tracer.SpanBuilder(spanName).StartScopedSpan(out ISpan span);
-
+            IScope scope = null;// Tracer.SpanBuilder(spanName).StartScopedSpan(out ISpan span);
+            ISpan span = null;
             span.PutMvcControllerClass(ExtractControllerName(descriptor))
-                .PutServerSpanKindAttribute()
+            //    .PutServerSpanKindAttribute()
                 .PutMvcControllerAction(ExtractActionName(descriptor));
 
             ActiveValue.Value = new SpanContext(span, scope);

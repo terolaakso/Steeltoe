@@ -14,7 +14,7 @@
 
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using OpenCensus.Stats;
+using OpenTelemetry.Stats;
 using Steeltoe.Common.Http;
 using Steeltoe.Management.Census.Stats;
 using System;

@@ -13,8 +13,8 @@
 // limitations under the License.
 
 using Microsoft.Extensions.Logging;
-using OpenCensus.Common;
-using OpenCensus.Trace;
+using OpenTelemetry.Context;
+using OpenTelemetry.Trace;
 using Steeltoe.Common.Diagnostics;
 using Steeltoe.Management.Census.Trace;
 using Steeltoe.Management.Census.Trace.Propagation;
@@ -110,44 +110,44 @@ namespace Steeltoe.Management.Tracing.Observer
 
         protected internal void HandleStartEvent(HttpRequestMessage request)
         {
-            if (ShouldIgnoreRequest(request.RequestUri.AbsolutePath))
-            {
-                Logger?.LogDebug("HandleStartEvent: Ignoring path: {path}", request.RequestUri.AbsolutePath);
-                return;
-            }
+            //if (ShouldIgnoreRequest(request.RequestUri.AbsolutePath))
+            //{
+            //    Logger?.LogDebug("HandleStartEvent: Ignoring path: {path}", request.RequestUri.AbsolutePath);
+            //    return;
+            //}
 
-            if (request.Properties.TryGetValue(SPANCONTEXT_KEY, out object context))
-            {
-                Logger?.LogDebug("HandleStartEvent: Continuing existing span!");
-                return;
-            }
+            //if (request.Properties.TryGetValue(SPANCONTEXT_KEY, out object context))
+            //{
+            //    Logger?.LogDebug("HandleStartEvent: Continuing existing span!");
+            //    return;
+            //}
 
-            string spanName = ExtractSpanName(request);
+            //string spanName = ExtractSpanName(request);
 
-            var parentSpan = GetCurrentSpan();
-            ISpan started;
-            IScope scope;
-            if (parentSpan != null)
-            {
-                scope = Tracer.SpanBuilderWithExplicitParent(spanName, parentSpan)
-                    .StartScopedSpan(out started);
-            }
-            else
-            {
-                scope = Tracer.SpanBuilder(spanName)
-                   .StartScopedSpan(out started);
-            }
+            //var parentSpan = GetCurrentSpan();
+            //ISpan started;
+            //IScope scope;
+            //if (parentSpan != null)
+            //{
+            //    scope = Tracer.SpanBuilderWithExplicitParent(spanName, parentSpan)
+            //        .StartScopedSpan(out started);
+            //}
+            //else
+            //{
+            //    scope = Tracer.SpanBuilder(spanName)
+            //       .StartScopedSpan(out started);
+            //}
 
-            request.Properties.Add(SPANCONTEXT_KEY, new SpanContext(started, scope));
+            //request.Properties.Add(SPANCONTEXT_KEY, new SpanContext(started, scope));
 
-            started.PutClientSpanKindAttribute()
-                .PutHttpRawUrlAttribute(request.RequestUri.ToString())
-                .PutHttpMethodAttribute(request.Method.ToString())
-                .PutHttpHostAttribute(request.RequestUri.Host, request.RequestUri.Port)
-                .PutHttpPathAttribute(request.RequestUri.AbsolutePath)
-                .PutHttpRequestHeadersAttribute(request.Headers.ToList());
+            //started.PutClientSpanKindAttribute()
+            //    .PutHttpRawUrlAttribute(request.RequestUri.ToString())
+            //    .PutHttpMethodAttribute(request.Method.ToString())
+            //    .PutHttpHostAttribute(request.RequestUri.Host, request.RequestUri.Port)
+            //    .PutHttpPathAttribute(request.RequestUri.AbsolutePath)
+            //    .PutHttpRequestHeadersAttribute(request.Headers.ToList());
 
-            InjectTraceContext(request, parentSpan);
+            //InjectTraceContext(request, parentSpan);
         }
 
         protected internal void HandleStopEvent(HttpRequestMessage request, HttpResponseMessage response, TaskStatus taskStatus)
@@ -191,21 +191,21 @@ namespace Steeltoe.Management.Tracing.Observer
 
         protected internal void InjectTraceContext(HttpRequestMessage message, ISpan parentSpan)
         {
-            // Expects the currentspan to be the span to inject into
-            var headers = message.Headers;
-            Propagation.Inject(Tracer.CurrentSpan.Context, headers,  (c, k, v) =>
-            {
-                if (k == B3Constants.XB3TraceId && v.Length > 16 && Options.UseShortTraceIds)
-                {
-                    v = v.Substring(v.Length - 16, 16);
-                }
+            //// Expects the currentspan to be the span to inject into
+            //var headers = message.Headers;
+            //Propagation.Inject(Tracer.CurrentSpan.Context, headers,  (c, k, v) =>
+            //{
+            //    if (k == B3Constants.XB3TraceId && v.Length > 16 && Options.UseShortTraceIds)
+            //    {
+            //        v = v.Substring(v.Length - 16, 16);
+            //    }
 
-                c.Add(k, v);
-            });
-            if (parentSpan != null)
-            {
-                headers.Add(B3Constants.XB3ParentSpanId, parentSpan.Context.SpanId.ToLowerBase16());
-            }
+            //    c.Add(k, v);
+            //});
+            //if (parentSpan != null)
+            //{
+            //    headers.Add(B3Constants.XB3ParentSpanId, parentSpan.Context.SpanId.ToLowerBase16());
+            //}
         }
 
         private string ExtractSpanName(HttpRequestMessage message)

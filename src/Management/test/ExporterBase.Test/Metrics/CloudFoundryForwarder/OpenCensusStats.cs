@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OpenCensus.Stats;
+using OpenTelemetry.Stats;
 using Steeltoe.Management.Census.Stats;
 
 namespace Steeltoe.Management.Exporter.Metrics.CloudFoundryForwarder.Test

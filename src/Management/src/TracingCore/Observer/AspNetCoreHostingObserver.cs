@@ -16,9 +16,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
-using OpenCensus.Common;
-using OpenCensus.Trace;
-using OpenCensus.Trace.Propagation;
+using OpenTelemetry.Context;
+using OpenTelemetry.Context.Propagation;
+using OpenTelemetry.Trace;
 using Steeltoe.Common.Diagnostics;
 using Steeltoe.Management.Census.Trace;
 using System;
@@ -138,24 +138,24 @@ namespace Steeltoe.Management.Tracing.Observer
                 return;
             }
 
-            ISpanContext traceContext = ExtractTraceContext(context);
+            SpanContext traceContext = ExtractTraceContext(context);
             string spanName = ExtractSpanName(context);
 
-            ISpan span;
-            IScope scope;
+            ISpan span = null ;
+            IScope scope = null;
             if (traceContext != null)
             {
                 Logger?.LogDebug("HandleStartEvent: Found parent span {parent}", traceContext.ToString());
-                scope = Tracer.SpanBuilderWithRemoteParent(spanName, traceContext)
-                    .StartScopedSpan(out span);
+                scope = null;// Tracer//.SpanBuilderWithRemoteParent(spanName, traceContext)
+                    //.StartScopedSpan(out span);
             }
             else
             {
-                 scope = Tracer.SpanBuilder(spanName)
-                    .StartScopedSpan(out span);
+                span = Tracer.SpanBuilder(spanName).StartSpan();
+                //    .StartScopedSpan(out span);
             }
 
-            span.PutServerSpanKindAttribute()
+            span//.PutServerSpanKindAttribute()
                 .PutHttpRawUrlAttribute(context.Request.GetDisplayUrl())
                 .PutHttpMethodAttribute(context.Request.Method.ToString())
                 .PutHttpPathAttribute(context.Request.Path.ToString())
@@ -209,16 +209,16 @@ namespace Steeltoe.Management.Tracing.Observer
             return "http:" + context.Request.Path.Value;
         }
 
-        protected internal ISpanContext ExtractTraceContext(HttpContext context)
+        protected internal SpanContext ExtractTraceContext(HttpContext context)
         {
             var request = context.Request;
             try
             {
-                return Propagation.Extract(request.Headers, (d, k) =>
-                {
-                    d.TryGetValue(k, out StringValues result);
-                    return result;
-                });
+                //return Propagation.Extract(request.Headers, (d, k) =>
+                //{
+                //    d.TryGetValue(k, out StringValues result);
+                //    return result;
+                //});
             }
             catch (SpanContextParseException)
             {
@@ -274,4 +274,5 @@ namespace Steeltoe.Management.Tracing.Observer
             return results;
         }
     }
+
 }

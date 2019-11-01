@@ -13,10 +13,6 @@
 // limitations under the License.
 
 using Microsoft.Owin;
-using OpenCensus.Stats;
-using OpenCensus.Stats.Aggregations;
-using OpenCensus.Stats.Measures;
-using OpenCensus.Tags;
 using Steeltoe.Management.Census.Stats;
 using Steeltoe.Management.Endpoint.Metrics;
 using Steeltoe.Management.Endpoint.Test;
@@ -139,30 +135,30 @@ namespace Steeltoe.Management.EndpointOwin.Metrics.Test
             Assert.Equal(404, context.Response.StatusCode);
         }
 
-        [Fact]
-        public async void HandleMetricsRequestAsync_GetSpecificExistingMetric_ReturnsExpected()
-        {
-            var opts = new MetricsEndpointOptions();
-            var mopts = TestHelper.GetManagementOptions(opts);
-            var stats = new OpenCensusStats();
-            var tagsComponent = new TagsComponent();
-            var tagger = tagsComponent.Tagger;
-            var ep = new MetricsEndpoint(opts, stats);
+        //[Fact]
+        //public async void HandleMetricsRequestAsync_GetSpecificExistingMetric_ReturnsExpected()
+        //{
+        //    var opts = new MetricsEndpointOptions();
+        //    var mopts = TestHelper.GetManagementOptions(opts);
+        //    var stats = new OpenCensusStats();
+        //    var tagsComponent = new TagsComponent();
+        //    var tagger = tagsComponent.Tagger;
+        //    var ep = new MetricsEndpoint(opts, stats);
 
-            SetupTestView(stats);
+        //    SetupTestView(stats);
 
-            var middle = new MetricsEndpointOwinMiddleware(null, ep, mopts);
+        //    var middle = new MetricsEndpointOwinMiddleware(null, ep, mopts);
 
-            var context = CreateRequest("GET", "/cloudfoundryapplication/metrics/test.test", "?tag=a:v1");
+        //    var context = CreateRequest("GET", "/cloudfoundryapplication/metrics/test.test", "?tag=a:v1");
 
-            await middle.HandleMetricsRequestAsync(context);
-            Assert.Equal(200, context.Response.StatusCode);
+        //    await middle.HandleMetricsRequestAsync(context);
+        //    Assert.Equal(200, context.Response.StatusCode);
 
-            context.Response.Body.Seek(0, SeekOrigin.Begin);
-            StreamReader rdr = new StreamReader(context.Response.Body);
-            string json = await rdr.ReadToEndAsync();
-            Assert.Equal("{\"name\":\"test.test\",\"measurements\":[{\"statistic\":\"TOTAL\",\"value\":45.0}],\"availableTags\":[{\"tag\":\"a\",\"values\":[\"v1\"]},{\"tag\":\"b\",\"values\":[\"v1\"]},{\"tag\":\"c\",\"values\":[\"v1\"]}]}", json);
-        }
+        //    context.Response.Body.Seek(0, SeekOrigin.Begin);
+        //    StreamReader rdr = new StreamReader(context.Response.Body);
+        //    string json = await rdr.ReadToEndAsync();
+        //    Assert.Equal("{\"name\":\"test.test\",\"measurements\":[{\"statistic\":\"TOTAL\",\"value\":45.0}],\"availableTags\":[{\"tag\":\"a\",\"values\":[\"v1\"]},{\"tag\":\"b\",\"values\":[\"v1\"]},{\"tag\":\"c\",\"values\":[\"v1\"]}]}", json);
+        //}
 
         [Fact]
         public void MetricsEndpointMiddleware_PathAndVerbMatching_ReturnsExpected()
@@ -199,39 +195,39 @@ namespace Steeltoe.Management.EndpointOwin.Metrics.Test
             return context;
         }
 
-        private void SetupTestView(OpenCensusStats stats)
-        {
-            var tagsComponent = new TagsComponent();
-            var tagger = tagsComponent.Tagger;
+        //private void SetupTestView(OpenCensusStats stats)
+        //{
+        //    var tagsComponent = new TagsComponent();
+        //    var tagger = tagsComponent.Tagger;
 
-            ITagKey aKey = TagKey.Create("a");
-            ITagKey bKey = TagKey.Create("b");
-            ITagKey cKey = TagKey.Create("c");
+        //    ITagKey aKey = TagKey.Create("a");
+        //    ITagKey bKey = TagKey.Create("b");
+        //    ITagKey cKey = TagKey.Create("c");
 
-            string viewName = "test.test";
-            IMeasureDouble measure = MeasureDouble.Create(Guid.NewGuid().ToString(), "test", MeasureUnit.Bytes);
+        //    string viewName = "test.test";
+        //    IMeasureDouble measure = MeasureDouble.Create(Guid.NewGuid().ToString(), "test", MeasureUnit.Bytes);
 
-            IViewName testViewName = ViewName.Create(viewName);
-            IView testView = View.Create(
-                                        testViewName,
-                                        "test",
-                                        measure,
-                                        Sum.Create(),
-                                        new List<ITagKey>() { aKey, bKey, cKey });
+        //    IViewName testViewName = ViewName.Create(viewName);
+        //    IView testView = View.Create(
+        //                                testViewName,
+        //                                "test",
+        //                                measure,
+        //                                Sum.Create(),
+        //                                new List<ITagKey>() { aKey, bKey, cKey });
 
-            stats.ViewManager.RegisterView(testView);
+        //    stats.ViewManager.RegisterView(testView);
 
-            ITagContext context1 = tagger
-                .EmptyBuilder
-                .Put(TagKey.Create("a"), TagValue.Create("v1"))
-                .Put(TagKey.Create("b"), TagValue.Create("v1"))
-                .Put(TagKey.Create("c"), TagValue.Create("v1"))
-                .Build();
+        //    ITagContext context1 = tagger
+        //        .EmptyBuilder
+        //        .Put(TagKey.Create("a"), TagValue.Create("v1"))
+        //        .Put(TagKey.Create("b"), TagValue.Create("v1"))
+        //        .Put(TagKey.Create("c"), TagValue.Create("v1"))
+        //        .Build();
 
-            for (int i = 0; i < 10; i++)
-            {
-                stats.StatsRecorder.NewMeasureMap().Put(measure, i).Record(context1);
-            }
-        }
+        //    for (int i = 0; i < 10; i++)
+        //    {
+        //        stats.StatsRecorder.NewMeasureMap().Put(measure, i).Record(context1);
+        //    }
+        //}
     }
 }

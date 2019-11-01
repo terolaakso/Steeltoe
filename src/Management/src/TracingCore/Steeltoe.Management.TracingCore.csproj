@@ -31,4 +31,9 @@
     <PackageReference Include="Steeltoe.Extensions.Logging.DynamicLogger" Version="$(SteeltoeVersion)$(SteeltoeVersionSuffix)" />
     <PackageReference Include="Steeltoe.Management.TracingBase" Version="$(SteeltoeVersion)$(SteeltoeVersionSuffix)" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OpenTelemetry" Version="0.2.0-alpha.40" />
+    <PackageReference Include="OpenTelemetry.Abstractions" Version="0.2.0-alpha.40" />
+  </ItemGroup>
 </Project>

@@ -20,4 +20,7 @@
   <ItemGroup Condition="'$(TargetFramework)' != 'netcoreapp3.0'">
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="$(AspNetCoreVersion)" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tracing\Zipkin\" />
+  </ItemGroup>
 </Project>

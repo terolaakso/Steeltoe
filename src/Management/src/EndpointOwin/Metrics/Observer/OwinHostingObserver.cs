@@ -14,10 +14,10 @@
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Owin;
-using OpenCensus.Stats;
-using OpenCensus.Stats.Aggregations;
-using OpenCensus.Stats.Measures;
-using OpenCensus.Tags;
+using OpenTelemetry.Stats;
+using OpenTelemetry.Stats.Aggregations;
+using OpenTelemetry.Stats.Measures;
+using OpenTelemetry.Tags;
 using Steeltoe.Common.Diagnostics;
 using Steeltoe.Management.Census.Stats;
 using Steeltoe.Management.Census.Tags;
@@ -36,10 +36,10 @@ namespace Steeltoe.Management.Endpoint.Metrics.Observer
         private const string OBSERVER_NAME = "OwinHostingObserver";
         private const string DIAGNOSTIC_NAME = "Steeltoe.Owin";
 
-        private readonly ITagKey statusTagKey = TagKey.Create("status");
-        private readonly ITagKey exceptionTagKey = TagKey.Create("exception");
-        private readonly ITagKey methodTagKey = TagKey.Create("method");
-        private readonly ITagKey uriTagKey = TagKey.Create("uri");
+        private readonly TagKey statusTagKey = TagKey.Create("status");
+        private readonly TagKey exceptionTagKey = TagKey.Create("exception");
+        private readonly TagKey methodTagKey = TagKey.Create("method");
+        private readonly TagKey uriTagKey = TagKey.Create("uri");
 
         private readonly IMeasureDouble responseTimeMeasure;
         private readonly IMeasureLong serverCountMeasure;
@@ -57,7 +57,7 @@ namespace Steeltoe.Management.Endpoint.Metrics.Observer
                     "Total request time",
                     responseTimeMeasure,
                     Distribution.Create(BucketBoundaries.Create(new List<double>() { 0.0, 1.0, 5.0, 10.0, 100.0 })),
-                    new List<ITagKey>() { statusTagKey, exceptionTagKey, methodTagKey, uriTagKey });
+                    new List<TagKey>() { statusTagKey, exceptionTagKey, methodTagKey, uriTagKey });
 
             ViewManager.RegisterView(view);
 
@@ -66,7 +66,7 @@ namespace Steeltoe.Management.Endpoint.Metrics.Observer
                     "Total request counts",
                     serverCountMeasure,
                     Sum.Create(),
-                    new List<ITagKey>() { statusTagKey, exceptionTagKey, methodTagKey, uriTagKey });
+                    new List<TagKey>() { statusTagKey, exceptionTagKey, methodTagKey, uriTagKey });
 
             ViewManager.RegisterView(view);
         }

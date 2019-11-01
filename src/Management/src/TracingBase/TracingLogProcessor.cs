@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OpenCensus.Trace;
+using OpenTelemetry.Trace;
 using Steeltoe.Extensions.Logging;
 using Steeltoe.Management.Census.Trace;
 using System.Text;
@@ -42,36 +42,36 @@ namespace Steeltoe.Management.Tracing
                     sb.Append(options.Name);
                     sb.Append(",");
 
-                    var traceId = context.TraceId.ToLowerBase16();
-                    if (traceId.Length > 16 && options.UseShortTraceIds)
-                    {
-                        traceId = traceId.Substring(traceId.Length - 16, 16);
-                    }
+                    //var traceId = context.TraceId.ToLowerBase16();
+                    //if (traceId.Length > 16 && options.UseShortTraceIds)
+                    //{
+                    //    traceId = traceId.Substring(traceId.Length - 16, 16);
+                    //}
 
-                    sb.Append(traceId);
-                    sb.Append(",");
+                    //sb.Append(traceId);
+                    //sb.Append(",");
 
-                    sb.Append(context.SpanId.ToLowerBase16());
-                    sb.Append(",");
+                    //sb.Append(context.SpanId.ToLowerBase16());
+                    //sb.Append(",");
 
-                    if (currentSpan.ParentSpanId != null)
-                    {
-                        sb.Append(currentSpan.ParentSpanId.ToLowerBase16());
-                    }
+                    //if (currentSpan.ParentSpanId != null)
+                    //{
+                    //    sb.Append(currentSpan.ParentSpanId.ToLowerBase16());
+                    //}
 
-                    sb.Append(",");
+                    //sb.Append(",");
 
-                    if (currentSpan.Options.HasFlag(SpanOptions.RecordEvents))
-                    {
-                        sb.Append("true");
-                    }
-                    else
-                    {
-                        sb.Append("false");
-                    }
+                    //if (currentSpan.Options.HasFlag(SpanOptions.RecordEvents))
+                    //{
+                    //    sb.Append("true");
+                    //}
+                    //else
+                    //{
+                    //    sb.Append("false");
+                    //}
 
-                    sb.Append("] ");
-                    return sb.ToString() + inputLogMessage;
+                    //sb.Append("] ");
+                    //return sb.ToString() + inputLogMessage;
                 }
             }
 
@@ -81,7 +81,7 @@ namespace Steeltoe.Management.Tracing
         protected internal Span GetCurrentSpan()
         {
             var span = tracing.Tracer?.CurrentSpan;
-            if (span == null || span.Context == SpanContext.Invalid)
+            if (span == null || !span.Context.IsValid)
             {
                 return null;
             }
